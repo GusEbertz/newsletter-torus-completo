@@ -1,0 +1,40 @@
+# Arquivos Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+venv/
+env/
+.venv/
+.env/
+
+# Banco de dados
+*.db
+*.sqlite
+src/database/
+
+# Ambiente
+.env
+.env.local
+.env.development
+.env.production
+.secrets
+secrets.json
+
+# Node/React
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/dist/
+/build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema
+.DS_Store
+Thumbs.db
