@@ -1,5 +1,10 @@
 import os
 import sys
+from dotenv import load_dotenv
+
+# Carregar variáveis de ambiente do arquivo .env
+load_dotenv()
+
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
@@ -9,7 +14,9 @@ from src.models.subscriber import db
 from src.routes.newsletter import newsletter_bp
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
-app.config['SECRET_KEY'] = 'torus-newsletter-secret-key-2025'
+
+# Configurar a Secret Key a partir da variável de ambiente
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 # Habilitar CORS para permitir requisições do frontend
 CORS(app, origins=['*'])
@@ -17,12 +24,12 @@ CORS(app, origins=['*'])
 # Registrar blueprints
 app.register_blueprint(newsletter_bp, url_prefix='/api')
 
-# Configuração do banco SQLite
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
+# Configurar a URI do banco de dados a partir da variável de ambiente
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-# Criar tabelas
+# Criar tabelas (se não existirem)
 with app.app_context():
     db.create_all()
 
@@ -42,6 +49,6 @@ def serve(path):
         else:
             return "index.html not found", 404
 
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
